@@ -1,0 +1,48 @@
+// A quote that has gone stale says so quietly, in its own bottom corner.
+//
+// Deliberately typographic rather than a panel: the quote is already a
+// distinct block, and a second box inside it would read as an error state.
+// Nothing here is alarming, because nothing is wrong — the words are exactly
+// what was written, and that is the point of the extension.
+// 🚨 `a.Verbatim-marker`, not `.Verbatim-marker`.
+//
+// This is a link inside a post body, and themes style those — at one class our
+// rules lost on cascade order alone and the marker rendered at the theme's
+// link weight, louder than the words it annotates. Measured in the page: one
+// class 600, `a` + class 400.
+a.Verbatim-marker {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 8px;
+  color: var(--muted-color);
+  font-size: 85%;
+  // Stated, not inherited: the quote is the content, this is the footnote.
+  font-weight: normal;
+  line-height: 1.3;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: var(--link-color);
+
+    .Verbatim-marker-label {
+      text-decoration: underline;
+    }
+  }
+
+  .icon {
+    font-size: 90%;
+    opacity: 0.8;
+  }
+}
+
+// 🚨 No border, tint or background on the quote itself.
+//
+// The first cut drew a hairline down the stale quote. Every theme already
+// draws one there, so it changed a grey line to a slightly different grey
+// line: invisible where it was meant to be useful, and one more thing to keep
+// working across themes. The marker line IS the signal, and it sits inside the
+// quote where the reader is already looking.
+//
+// The class is still set, so a theme that wants to do more can.
