@@ -17,7 +17,12 @@
     "extra": {
         "flarum-extension": {
             "title": "Verbatim",
-            "category": "feature"
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-quote-right",
+                "backgroundColor": "#0f766e",
+                "color": "#fff"
+            }
         }
     }
 }
