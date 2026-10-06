@@ -74,6 +74,10 @@ composer require ernestdefoe/verbatim
 
 Nothing to configure — enable it and it works.
 
+## Discuss
+
+Questions, ideas and release notes: [Verbatim on discuss.flarum.org](https://discuss.flarum.org/d/39847-verbatim-a-quote-that-says-when-it-has-gone-stale-built-using-ai).
+
 ## Licence
 
 MIT
