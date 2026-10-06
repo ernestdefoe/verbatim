@@ -10,6 +10,9 @@
             "email": "ernestdefoe@gmail.com"
         }
     ],
+    "support": {
+        "forum": "https://discuss.flarum.org/d/39847-verbatim-a-quote-that-says-when-it-has-gone-stale-built-using-ai"
+    },
     "require": {
         "php": "^8.3",
         "flarum/core": "^2.0"
