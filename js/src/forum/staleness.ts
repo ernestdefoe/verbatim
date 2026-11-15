@@ -1,3 +1,5 @@
+import type Post from 'flarum/common/models/Post';
+
 /**
  * Has the source moved under this quote?
  *
@@ -10,7 +12,7 @@
  *
  * So the marker reports the fact, and the wording says exactly that.
  */
-export function editedSinceQuoted(source, quoting) {
+export function editedSinceQuoted(source: Post | null | undefined, quoting: Post | null | undefined): Date | null {
   const edited = source?.editedAt?.();
   const posted = quoting?.createdAt?.();
 

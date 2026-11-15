@@ -1,4 +1,5 @@
 import app from 'flarum/forum/app';
+import type Post from 'flarum/common/models/Post';
 
 /**
  * The posts our quotes came from.
@@ -18,19 +19,19 @@ import app from 'flarum/forum/app';
 const CHUNK = 50;
 
 /** Ids core did not return: deleted, or not visible to this reader. */
-const absent = new Set();
+const absent = new Set<string>();
 
 /** Ids currently being fetched, so a redraw storm cannot re-request them. */
-const loading = new Set();
+const loading = new Set<string>();
 
-let queued = new Set();
-let scheduled = null;
+let queued = new Set<string>();
+let scheduled: ReturnType<typeof setTimeout> | null = null;
 
-export function sourceFor(id) {
-  return app.store.getById('posts', String(id));
+export function sourceFor(id: string | number): Post | undefined {
+  return app.store.getById<Post>('posts', String(id));
 }
 
-export function unavailable(id) {
+export function unavailable(id: string | number): boolean {
   return absent.has(String(id));
 }
 
@@ -39,7 +40,7 @@ export function unavailable(id) {
  * absent and already-loading ids are dropped, and what is left is batched into
  * one request per animation frame rather than one per quote.
  */
-export function request(id) {
+export function request(id: string | number): void {
   const key = String(id);
 
   if (sourceFor(key) || absent.has(key) || loading.has(key)) return;
@@ -51,12 +52,12 @@ export function request(id) {
   scheduled = setTimeout(flush, 0);
 }
 
-async function flush() {
+async function flush(): Promise<void> {
   scheduled = null;
 
   const ids = [...queued].filter((id) => !sourceFor(id) && !absent.has(id) && !loading.has(id));
 
-  queued = new Set();
+  queued = new Set<string>();
 
   if (!ids.length) return;
 
@@ -66,7 +67,7 @@ async function flush() {
     const chunk = ids.slice(i, i + CHUNK);
 
     try {
-      await app.store.find('posts', { filter: { id: chunk.join(',') } });
+      await app.store.find<Post[]>('posts', { filter: { id: chunk.join(',') } });
     } catch (e) {
       // A failed lookup must not mark these absent — that would be a permanent
       // "no marker" on a quote whose source is fine. Let the next render ask

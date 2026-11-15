@@ -1,6 +1,7 @@
 import app from 'flarum/forum/app';
 import humanTime from 'flarum/common/utils/humanTime';
 import extractText from 'flarum/common/utils/extractText';
+import type Post from 'flarum/common/models/Post';
 
 import { sourceFor, unavailable, request } from './sources';
 import { editedSinceQuoted } from './staleness';
@@ -17,7 +18,7 @@ const MARKER = 'Verbatim-marker';
  * every redraw, and a pass that appended blindly would stack a marker per
  * redraw until the quote was a wall of them.
  */
-export function decorate(element, post) {
+export function decorate(element: Element | null | undefined, post: Post | null | undefined): void {
   if (!element || !post) return;
 
   const body = element.querySelector('.Post-body') || element;
@@ -25,7 +26,7 @@ export function decorate(element, post) {
   // Each quote-button quote renders as a PostMention inside a blockquote. A
   // blockquote somebody typed by hand carries no source, and there is nothing
   // to say about it.
-  body.querySelectorAll('a.PostMention[data-id]').forEach((mention) => {
+  body.querySelectorAll<HTMLAnchorElement>('a.PostMention[data-id]').forEach((mention) => {
     const quote = mention.closest('blockquote');
 
     if (!quote) return; // an inline post mention, not a quote
@@ -58,13 +59,13 @@ export function decorate(element, post) {
   });
 }
 
-function mark(quote, mention, edited) {
+function mark(quote: HTMLQuoteElement, mention: HTMLAnchorElement, edited: Date): void {
   const when = humanTime(edited);
 
   const label = extractText(app.translator.trans('ernestdefoe-verbatim.forum.quote.stale'));
   const help = extractText(app.translator.trans('ernestdefoe-verbatim.forum.quote.stale_help', { time: when }));
 
-  let marker = quote.querySelector(':scope > .' + MARKER);
+  let marker = quote.querySelector<HTMLAnchorElement>(':scope > .' + MARKER);
 
   if (!marker) {
     marker = document.createElement('a');
@@ -81,11 +82,11 @@ function mark(quote, mention, edited) {
   if (href) marker.setAttribute('href', href);
 
   marker.setAttribute('title', help);
-  marker.querySelector('.' + MARKER + '-label').textContent = label;
+  marker.querySelector('.' + MARKER + '-label')!.textContent = label;
   quote.classList.add('Verbatim-stale');
 }
 
-function clear(quote) {
+function clear(quote: Element): void {
   const marker = quote.querySelector(':scope > .' + MARKER);
 
   if (marker) marker.remove();
