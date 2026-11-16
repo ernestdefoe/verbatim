@@ -68,11 +68,11 @@ async function flush(): Promise<void> {
 
     try {
       await app.store.find<Post[]>('posts', { filter: { id: chunk.join(',') } });
-    } catch (e) {
-      // A failed lookup must not mark these absent — that would be a permanent
-      // "no marker" on a quote whose source is fine. Let the next render ask
-      // again.
-      console.error('[verbatim] could not load quoted posts:', e);
+    } catch {
+      // Silent on purpose: core's request handler already reports a failed
+      // request. A failed lookup must not mark these absent — that would be a
+      // permanent "no marker" on a quote whose source is fine. Let the next
+      // render ask again.
       chunk.forEach((id) => loading.delete(id));
 
       continue;

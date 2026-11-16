@@ -22,8 +22,9 @@ app.initializers.add('ernestdefoe-verbatim', () => {
      */
     try {
       decorate(vnode.dom, this.attrs.post);
-    } catch (e) {
-      console.error('[verbatim] leaving this post alone:', e);
+    } catch {
+      // Silent on purpose: a post we cannot decorate is simply left as core
+      // rendered it, with no marker. Nothing here is worth stopping the page.
     }
   });
 });
