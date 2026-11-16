@@ -4,6 +4,8 @@ import type CommentPost from 'flarum/forum/components/CommentPost';
 
 import { decorate } from './decorate';
 
+export { default as extend } from './extend';
+
 /*
  * 🚨 Both extends name a module PATH rather than an imported component.
  * CommentPost is code-split, so an import compiles to a registry lookup that
